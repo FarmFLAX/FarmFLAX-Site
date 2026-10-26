@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" data-root="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checkout · FarmFLAX</title>
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap page" id="main">
+  <h1>Checkout</h1>
+  <div class="two-col">
+    <form id="form" novalidate>
+      <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required></div>
+      <div class="row2">
+        <div class="field"><label for="phone">Mobile number</label><input id="phone" name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="10-digit number" required></div>
+        <div class="field"><label for="email">Email (optional)</label><input id="email" name="email" type="email" autocomplete="email"></div>
+      </div>
+      <div class="field"><label for="line1">House, building, street</label><input id="line1" name="line1" autocomplete="address-line1" required></div>
+      <div class="field"><label for="line2">Area, landmark (optional)</label><input id="line2" name="line2" autocomplete="address-line2"></div>
+      <div class="row2">
+        <div class="field"><label for="city">City</label><input id="city" name="city" autocomplete="address-level2" required></div>
+        <div class="field"><label for="pincode">PIN code</label><input id="pincode" name="pincode" inputmode="numeric" maxlength="6" autocomplete="postal-code" required></div>
+      </div>
+      <div class="field"><label for="state">State</label>
+        <select id="state" name="state" autocomplete="address-level1" required><option value="">Select state</option></select>
+      </div>
+      <div class="field"><label for="notes">Notes for us (optional)</label><textarea id="notes" name="notes" rows="2"></textarea></div>
+
+      <fieldset style="border:0;padding:0;margin:0 0 14px">
+        <legend style="font-weight:600;margin-bottom:8px">How would you like to pay?</legend>
+        <div id="pay-opts"></div>
+      </fieldset>
+      <p class="err" id="err" role="alert" hidden></p>
+      <button class="btn btn-primary btn-block" type="submit" id="submit">Place order</button>
+    </form>
+    <aside class="summary" id="summary" aria-label="Order summary"><p class="muted">Loading…</p></aside>
+  </div>
+</main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var C = FF_CONFIG, products = [], form = document.getElementById("form"), err = document.getElementById("err");
+  var STATES = ["Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Ladakh","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Puducherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"];
+  document.getElementById("state").insertAdjacentHTML("beforeend", STATES.map(function (s) { return '<option>' + s + '</option>'; }).join(""));
+
+  var opts = [];
+  if (C.onlinePayment) opts.push(["online", "Pay online", "UPI, cards and net banking. Your order is confirmed right away."]);
+  if (C.cod) opts.push(["cod", "Cash on delivery", "Pay when your order arrives."]);
+  opts.push(["whatsapp", "Confirm on WhatsApp", "We send you a payment link or UPI details on WhatsApp."]);
+  document.getElementById("pay-opts").innerHTML = opts.map(function (o, i) {
+    return '<label class="pay-opt"><input type="radio" name="method" value="' + o[0] + '"' + (i === 0 ? " checked" : "") + '><span><b>' + o[1] + '</b><small>' + o[2] + '</small></span></label>';
+  }).join("");
+
+  function summary() {
+    var lines = FF.cartLines(products), t = FF.totals(lines);
+    document.getElementById("summary").innerHTML = lines.map(function (l) {
+      return '<div class="row"><span>' + l.qty + ' × ' + FF.esc(l.product.name) + '</span><span>' + FF.money(l.total) + '</span></div>';
+    }).join("") + '<div class="row"><span>Delivery</span><span>' + (t.shipping ? FF.money(t.shipping) : "Free") + '</span></div>' +
+      '<div class="row total"><span>Total</span><span>' + FF.money(t.total) + '</span></div>';
+    return lines;
+  }
+
+  function orderText(o) {
+    return "Hi FarmFLAX, I placed order " + o.orderId + ".\n" +
+      o.lines.map(function (l) { return "• " + l.qty + " × " + l.name + " = ₹" + l.total; }).join("\n") +
+      "\nDelivery: " + (o.shipping ? "₹" + o.shipping : "Free") + "\nTotal: ₹" + o.total +
+      "\nName: " + o.customer.name + "\nPhone: " + o.customer.phone +
+      "\nAddress: " + [o.customer.line1, o.customer.line2, o.customer.city, o.customer.state, o.customer.pincode].filter(Boolean).join(", ") +
+      "\nPayment: " + ({ online: "Online", cod: "Cash on delivery", whatsapp: "Please send payment details" })[o.method];
+  }
+
+  function done(o) {
+    FF.clearCart();
+    var paid = o.method === "online";
+    document.getElementById("main").innerHTML = '<h1>Thank you, ' + FF.esc(o.customer.name.split(" ")[0]) + '!</h1>' +
+      '<div class="done-box"><p>Your order number is <span class="oid">' + FF.esc(o.orderId) + '</span>. Total ' + FF.money(o.total) + '.</p>' +
+      (o.method === "whatsapp" ? '<p>Tap the button below to send your order to us on WhatsApp. We will reply with payment details and confirm your delivery.</p>' :
+        '<p>We have your order and will confirm on WhatsApp. You can also message us any time.</p>') +
+      '<a class="btn btn-wa" target="_blank" rel="noopener" href="' + FF.waLink(orderText(o)) + '">' + (o.method === "whatsapp" ? "Send order on WhatsApp" : "Message us on WhatsApp") + '</a>' +
+      ' <a class="btn btn-ghost" href="index.html">Back to shop</a></div>';
+    window.scrollTo(0, 0);
+  }
+
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function validate() {
+    var c = { name: val("name"), phone: val("phone").replace(/\D/g, ""), email: val("email"), line1: val("line1"), line2: val("line2"), city: val("city"), state: val("state"), pincode: val("pincode"), notes: val("notes") };
+    if (!c.name) return [null, "Please enter your full name.", "name"];
+    if (!/^[6-9]\d{9}$/.test(c.phone)) return [null, "Please enter a valid 10-digit mobile number.", "phone"];
+    if (c.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.email)) return [null, "Please check your email address.", "email"];
+    if (!c.line1) return [null, "Please enter your house and street.", "line1"];
+    if (!c.city) return [null, "Please enter your city.", "city"];
+    if (!/^\d{6}$/.test(c.pincode)) return [null, "Please enter a 6-digit PIN code.", "pincode"];
+    if (!c.state) return [null, "Please select your state.", "state"];
+    return [c];
+  }
+
+  FF.loadProducts().then(function (ps) {
+    products = ps;
+    if (!summary().length) document.getElementById("main").innerHTML = '<h1>Checkout</h1><div class="empty"><p>Your cart is empty.</p><a class="btn btn-primary" href="index.html#shop">Browse products</a></div>';
+  });
+
+  form.addEventListener("input", function () { err.hidden = true; });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = validate();
+    if (!v[0]) { err.textContent = v[1]; err.hidden = false; document.getElementById(v[2]).focus(); return; }
+    err.hidden = true;
+    var method = form.querySelector('input[name="method"]:checked').value;
+    var lines = FF.cartLines(products), t = FF.totals(lines);
+    var payload = { items: lines.map(function (l) { return { id: l.product.id, qty: l.qty }; }), customer: v[0], method: method };
+    var btn = document.getElementById("submit"); btn.disabled = true; btn.textContent = "Placing order…";
+
+    fetch("/api/order", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, body: j }; }); })
+      .then(function (res) {
+        if (!res.ok) throw { message: res.body && res.body.error, status: res.status };
+        var o = res.body;
+        if (o.payUrl) { FF.clearCart(); location.href = o.payUrl; return; }
+        done(Object.assign({ customer: v[0], method: method }, o));
+      })
+      .catch(function (x) {
+        if (x && x.message && x.status && x.status < 500) {
+          err.textContent = x.message; err.hidden = false; btn.disabled = false; btn.textContent = "Place order"; return;
+        }
+        // The order service is not reachable (for example on a preview copy). Fall back to WhatsApp so no order is lost.
+        var id = "FF-" + Date.now().toString(36).toUpperCase();
+        done({ orderId: id, customer: v[0], method: "whatsapp", subtotal: t.subtotal, shipping: t.shipping, total: t.total,
+          lines: lines.map(function (l) { return { name: l.product.name, qty: l.qty, total: l.total }; }) });
+      });
+  });
+});
+</script>
+</body>
+</html>

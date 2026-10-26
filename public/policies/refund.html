@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Returns and refunds · FarmFLAX</title>
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap prose">
+<h1>Returns and refunds</h1>
+<p class="muted">Last updated: [DATE]</p>
+<p class="draft">Draft for review by your CA or lawyer before launch. Text in [square brackets] must be filled in.</p>
+<h2>Food safety</h2><p>Because our products are food items, we cannot accept returns of opened packs.</p>
+<h2>Damaged, wrong or missing items</h2><p>If your pack arrives damaged, if you receive the wrong product, or if an item is missing, message us on WhatsApp within [48 hours] of delivery with a photo of the pack and the outer box. We will send a replacement or refund you in full.</p>
+<h2>Quality concerns</h2><p>If you are not happy with the quality, tell us within [7 days] of delivery with a photo. We will review it and offer a replacement or refund.</p>
+<h2>Cancellations</h2><p>You can cancel an order before it is dispatched by messaging us on WhatsApp. Paid orders are refunded in full.</p>
+<h2>How refunds are paid</h2><p>Refunds go back to the original payment method within [5–7] working days of approval.</p>
+</main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("[data-cfg]").forEach(function (el) { el.textContent = FF_CONFIG[el.getAttribute("data-cfg")]; });
+  var wa = document.getElementById("wa-link"); if (wa) wa.href = FF.waLink("Hi FarmFLAX, I need help with my order.");
+});
+</script>
+</body>
+</html>

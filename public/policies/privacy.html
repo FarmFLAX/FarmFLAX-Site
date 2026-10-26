@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy policy · FarmFLAX</title>
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap prose">
+<h1>Privacy policy</h1>
+<p class="muted">Last updated: [DATE]</p>
+<p class="draft">Draft for review by your CA or lawyer before launch. Text in [square brackets] must be filled in.</p>
+<p>This policy explains what personal information <span data-cfg="legalName"></span> ("FarmFLAX", "we") collects through this website and how we use it.</p>
+<h2>What we collect</h2><ul><li>Your name, mobile number, email address and delivery address when you place an order.</li><li>Order details: products, quantities and amounts.</li><li>Payment status from our payment partner. We do not see or store your card or bank details.</li></ul>
+<h2>How we use it</h2><ul><li>To process, deliver and support your order.</li><li>To contact you about your order on WhatsApp, phone or email.</li><li>To meet our legal and tax obligations.</li></ul>
+<h2>Who we share it with</h2><p>Only with partners who help us complete your order: our payment gateway, courier partners and WhatsApp (Meta) for order messages. We do not sell your information.</p>
+<h2>Cookies and storage</h2><p>The website stores your cart in your own browser so it is still there when you come back. We do not use advertising trackers [update this if you add analytics or ads].</p>
+<h2>Your choices</h2><p>You can ask us to correct or delete your information by writing to <span data-cfg="email"></span>.</p>
+<h2>Contact</h2><p><span data-cfg="legalName"></span>, <span data-cfg="address"></span>.</p>
+</main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("[data-cfg]").forEach(function (el) { el.textContent = FF_CONFIG[el.getAttribute("data-cfg")]; });
+  var wa = document.getElementById("wa-link"); if (wa) wa.href = FF.waLink("Hi FarmFLAX, I need help with my order.");
+});
+</script>
+</body>
+</html>

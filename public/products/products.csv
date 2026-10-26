@@ -1,0 +1,11 @@
+id,name,category,weight_g,price,mrp,in_stock,images,short,description
+cashew-w180,Cashew W180,Dry fruits,200,349,399,yes,1.jpg|2.jpg,"Large, whole W180 cashews","W180 is one of the largest cashew grades. Every batch is sorted by hand to remove broken and discoloured pieces before it is packed."
+almond,Almonds,Dry fruits,200,269,299,yes,1.jpg|2.jpg,"Whole almonds, hand-sorted","Whole almonds, sorted by hand for size and colour. Good for soaking overnight, snacking or baking."
+raisin,Raisins,Dry fruits,200,149,169,yes,1.jpg|2.jpg,"Seedless raisins","Seedless raisins, cleaned and sorted. Add them to kheer, halwa, salads or your breakfast bowl."
+walnut,Walnut Kernels,Dry fruits,200,399,449,yes,1.jpg|2.jpg,"Light walnut halves","Light-coloured walnut halves and pieces, checked for freshness before packing."
+pista,Pistachios,Dry fruits,200,379,429,yes,1.jpg|2.jpg,"Roasted pistachios in shell","Pistachios in the shell, sorted to keep the ones that open easily."
+fox-nut,Fox Nuts (Makhana),Healthy snacks,200,249,279,yes,1.jpg|2.jpg,"Large, crunchy makhana","Large-size makhana, graded and cleaned. Roast with a little ghee and salt for a quick snack."
+pumpkin-seed,Pumpkin Seeds,Seeds,200,199,229,yes,1.jpg|2.jpg,"Raw pumpkin seeds","Raw, unsalted pumpkin seeds. Sprinkle on salads, smoothies and curd, or roast them lightly."
+sunflower-seed,Sunflower Seeds,Seeds,200,129,149,yes,1.jpg|2.jpg,"Raw sunflower seeds","Raw, hulled sunflower seeds. A crunchy topping for salads, bowls and bakes."
+flax-seed,Flax Seeds,Seeds,200,99,119,yes,1.jpg|2.jpg,"Whole brown flax seeds","Whole brown flax seeds, cleaned and sorted. Grind them fresh and add to rotis, smoothies or curd."
+chia-seed,Chia Seeds,Seeds,200,179,199,yes,1.jpg|2.jpg,"Black chia seeds","Clean black chia seeds. Soak them in water or milk for puddings and drinks."

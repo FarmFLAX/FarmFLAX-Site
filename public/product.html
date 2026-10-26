@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" data-root="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FarmFLAX · Product</title>
+<meta name="description" content="Hand-picked dry fruits and seeds from FarmFLAX.">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap" id="pdp"><p class="muted page">Loading…</p></main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var root = document.getElementById("pdp");
+  var id = new URLSearchParams(location.search).get("p");
+  var qty = 1, p = null;
+
+  function view() {
+    var off = p.mrp > p.price ? Math.round((1 - p.price / p.mrp) * 100) : 0;
+    root.innerHTML = '<div class="pdp">' +
+      '<div class="gallery"><img class="main" id="main-img" src="' + FF.esc(p.images[0]) + '" alt="' + FF.esc(p.name) + '" width="800" height="800">' +
+      (p.images.length > 1 ? '<div class="thumbs">' + p.images.map(function (src, i) {
+        return '<button type="button" data-img="' + i + '" aria-label="Photo ' + (i + 1) + '" aria-current="' + (i === 0) + '"><img src="' + FF.esc(src) + '" alt=""></button>';
+      }).join("") + "</div>" : "") + "</div>" +
+      '<div><div class="cat">' + FF.esc(p.category) + '</div><h1>' + FF.esc(p.name) + '</h1>' +
+      '<div class="price-row"><span class="price">' + FF.money(p.price) + '</span>' +
+      (off ? '<span class="mrp">MRP ' + FF.money(p.mrp) + '</span><span class="off">' + off + '% off</span>' : "") +
+      '</div><div class="weight">' + p.weight + ' g pack · inclusive of all taxes</div>' +
+      '<p class="desc">' + FF.esc(p.description) + '</p>' +
+      (p.inStock ?
+        '<div class="buy-row"><div class="qty"><button type="button" id="minus" aria-label="Decrease quantity">−</button><output id="q" aria-live="polite">1</output><button type="button" id="plus" aria-label="Increase quantity">+</button></div>' +
+        '<button class="btn btn-primary" type="button" id="add">Add to cart</button>' +
+        '<a class="btn btn-wa" id="wa" target="_blank" rel="noopener" href="#">Order on WhatsApp</a></div>'
+        : '<p class="oos">Out of stock. Message us on WhatsApp to know when it is back.</p>') +
+      '<div class="facts"><div><span>Net quantity</span><b>' + p.weight + ' g</b></div><div><span>Pack</span><b>Resealable pouch</b></div><div><span>Delivery</span><b>Free above ' + FF.money(FF_CONFIG.freeShippingAbove) + '</b></div></div>' +
+      "</div></div>";
+    document.title = p.name + " · FarmFLAX";
+    syncWa();
+  }
+  function syncWa() {
+    var a = document.getElementById("wa"); if (!a) return;
+    a.href = FF.waLink("Hi FarmFLAX, I would like to order " + qty + " × " + p.name + " (" + p.weight + " g).");
+  }
+
+  FF.loadProducts().then(function (ps) {
+    p = ps.filter(function (x) { return x.id === id; })[0];
+    if (!p) { root.innerHTML = '<div class="page"><h1>Product not found</h1><p><a href="index.html#shop">Back to the shop</a></p></div>'; return; }
+    view();
+  }).catch(function () { root.innerHTML = '<p class="err page">Product could not be loaded. Please refresh the page.</p>'; });
+
+  root.addEventListener("click", function (e) {
+    var t = e.target.closest("button"); if (!t || !p) return;
+    if (t.id === "plus" || t.id === "minus") {
+      qty = Math.max(1, Math.min(20, qty + (t.id === "plus" ? 1 : -1)));
+      document.getElementById("q").textContent = qty; syncWa();
+    } else if (t.id === "add") {
+      FF.addToCart(p.id, qty); FF.toast(qty + " added to cart");
+    } else if (t.hasAttribute("data-img")) {
+      var i = Number(t.getAttribute("data-img"));
+      document.getElementById("main-img").src = p.images[i];
+      root.querySelectorAll("[data-img]").forEach(function (b) { b.setAttribute("aria-current", String(b === t)); });
+    }
+  });
+});
+</script>
+</body>
+</html>

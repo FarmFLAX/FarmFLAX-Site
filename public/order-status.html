@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" data-root="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Order status · FarmFLAX</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap page" id="main"></main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var q = new URLSearchParams(location.search), id = q.get("order") || "", paid = q.get("paid") === "1";
+  var help = FF.waLink("Hi FarmFLAX, I need help with order " + id + ".");
+  document.getElementById("main").innerHTML = paid
+    ? '<h1>Payment received</h1><div class="done-box"><p>Thank you! Order <span class="oid">' + FF.esc(id) + '</span> is confirmed. We will send you the tracking link on WhatsApp once it ships.</p><a class="btn btn-primary" href="index.html">Back to shop</a></div>'
+    : '<h1>Payment not completed</h1><div class="done-box"><p>We could not confirm the payment for order <span class="oid">' + FF.esc(id || "unknown") + '</span>. If money was taken from your account, message us and we will sort it out.</p><a class="btn btn-wa" target="_blank" rel="noopener" href="' + help + '">Message us on WhatsApp</a> <a class="btn btn-ghost" href="cart.html">Back to cart</a></div>';
+});
+</script>
+</body>
+</html>

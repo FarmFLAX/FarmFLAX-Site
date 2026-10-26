@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shipping policy · FarmFLAX</title>
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap prose">
+<h1>Shipping policy</h1>
+<p class="muted">Last updated: [DATE]</p>
+<p class="draft">Draft for review by your CA or lawyer before launch. Text in [square brackets] must be filled in.</p>
+<h2>Where we deliver</h2><p>We deliver across India through our courier partners. Some remote PIN codes may take longer or may not be serviceable; we will tell you on WhatsApp if that happens.</p>
+<h2>Dispatch time</h2><p>Orders are packed and dispatched within [1–2] working days of payment confirmation.</p>
+<h2>Delivery time</h2><p>Most orders arrive within [3–7] working days after dispatch, depending on your location.</p>
+<h2>Delivery charges</h2><p>Delivery is free on orders above ₹<span data-cfg="freeShippingAbove"></span>. Below that, a delivery charge of ₹<span data-cfg="shippingFee"></span> applies and is shown before you pay.</p>
+<h2>Tracking</h2><p>Once your order ships, we send the tracking link to your mobile number on WhatsApp.</p>
+</main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("[data-cfg]").forEach(function (el) { el.textContent = FF_CONFIG[el.getAttribute("data-cfg")]; });
+  var wa = document.getElementById("wa-link"); if (wa) wa.href = FF.waLink("Hi FarmFLAX, I need help with my order.");
+});
+</script>
+</body>
+</html>

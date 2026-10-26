@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-root="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FarmFLAX · Hand-picked dry fruits and seeds</title>
+<meta name="description" content="Hand-picked dry fruits, seeds and makhana in 200 g packs. Premium quality at an everyday price. Order online or on WhatsApp.">
+<link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main>
+  <section class="wrap hero">
+    <div>
+      <h1>Premium dry fruits, <em>hand-picked</em>, at an honest price.</h1>
+      <p>Every pack is sorted by a person, not just a machine. Premium quality, without paying extra for a big name.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#shop">Shop all products</a>
+        <a class="btn btn-ghost" id="hero-wa" href="#" target="_blank" rel="noopener">Order on WhatsApp</a>
+      </div>
+    </div>
+    <div class="hero-art" id="hero-art" aria-hidden="true"></div>
+  </section>
+
+  <section class="wrap promise" aria-label="Our promise">
+    <div><b>Hand-picked</b><span>Broken and discoloured pieces are removed by hand before packing.</span></div>
+    <div><b>Fair price</b><span>Premium quality without the premium mark-up.</span></div>
+    <div><b>Packed fresh</b><span>Small batches in resealable 200 g pouches.</span></div>
+  </section>
+
+  <section class="wrap" id="shop">
+    <div class="section-head">
+      <h2>Shop</h2>
+      <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
+    </div>
+    <div class="grid" id="grid"><p class="muted">Loading products…</p></div>
+  </section>
+
+  <section class="why" id="why">
+    <div class="wrap">
+      <h2>Why FarmFLAX</h2>
+      <div class="why-grid">
+        <div><h3>Selected for you</h3><p>Our team checks every batch for size, colour and freshness before it reaches you.</p></div>
+        <div><h3>No brand tax</h3><p>You pay for the product, not for a fancy shelf in a mall.</p></div>
+        <div><h3>Order your way</h3><p>Pay online on this website, or send us your order on WhatsApp.</p></div>
+      </div>
+      <p class="acronym"><b>F</b>arm <b>L</b>iving <b>A</b>nd e<b>X</b>cellence</p>
+    </div>
+  </section>
+</main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var grid = document.getElementById("grid"), filters = document.getElementById("filters"), active = "All", all = [];
+  document.getElementById("hero-wa").href = FF.waLink("Hi FarmFLAX, I would like to place an order.");
+
+  function card(p) {
+    var off = p.mrp > p.price ? Math.round((1 - p.price / p.mrp) * 100) : 0;
+    var url = "product.html?p=" + encodeURIComponent(p.id);
+    return '<article class="card">' +
+      '<a class="img" href="' + url + '"><img src="' + FF.esc(p.images[0]) + '" alt="' + FF.esc(p.name) + '" loading="lazy" width="400" height="400"></a>' +
+      '<div class="body"><h3><a href="' + url + '">' + FF.esc(p.name) + '</a></h3>' +
+      '<div class="short">' + FF.esc(p.short) + '</div>' +
+      '<div class="price-row"><span class="price">' + FF.money(p.price) + '</span>' +
+      (off ? '<span class="mrp">' + FF.money(p.mrp) + '</span><span class="off">' + off + '% off</span>' : "") +
+      '<span class="weight">· ' + p.weight + ' g</span></div>' +
+      (p.inStock ? '<button class="btn btn-primary" type="button" data-add="' + FF.esc(p.id) + '">Add to cart</button>' : '<span class="oos">Out of stock</span>') +
+      "</div></article>";
+  }
+  function render() {
+    var list = all.filter(function (p) { return active === "All" || p.category === active; });
+    grid.innerHTML = list.length ? list.map(card).join("") : '<p class="muted">No products in this category yet.</p>';
+  }
+  function renderFilters() {
+    var cats = ["All"].concat(all.map(function (p) { return p.category; }).filter(function (c, i, a) { return c && a.indexOf(c) === i; }));
+    filters.innerHTML = cats.map(function (c) { return '<button class="chip" type="button" data-cat="' + FF.esc(c) + '" aria-pressed="' + (c === active) + '">' + FF.esc(c) + "</button>"; }).join("");
+  }
+  FF.loadProducts().then(function (ps) {
+    all = ps; renderFilters(); render();
+    document.getElementById("hero-art").innerHTML = ps.slice(0, 4).map(function (p) { return '<img src="' + FF.esc(p.images[0]) + '" alt="">'; }).join("");
+  }).catch(function () { grid.innerHTML = '<p class="err">Products could not be loaded. Please refresh the page.</p>'; });
+
+  filters.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cat]"); if (!b) return; active = b.getAttribute("data-cat"); renderFilters(); render();
+  });
+  grid.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-add]"); if (!b) return;
+    FF.addToCart(b.getAttribute("data-add"), 1); FF.toast("Added to cart");
+  });
+});
+</script>
+</body>
+</html>

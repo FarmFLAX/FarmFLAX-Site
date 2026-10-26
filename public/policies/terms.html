@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Terms and conditions · FarmFLAX</title>
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap prose">
+<h1>Terms and conditions</h1>
+<p class="muted">Last updated: [DATE]</p>
+<p class="draft">Draft for review by your CA or lawyer before launch. Text in [square brackets] must be filled in.</p>
+<p>These terms apply when you use this website or buy from <span data-cfg="legalName"></span> ("FarmFLAX").</p>
+<h2>Products</h2><p>Product photos are for illustration. Natural products vary slightly in size and colour from batch to batch. Net quantity, MRP, FSSAI number and best-before date are printed on every pack.</p>
+<h2>Prices</h2><p>All prices are in Indian rupees and include GST. Delivery charges, if any, are shown before you pay.</p>
+<h2>Orders</h2><p>An order is confirmed once payment is received, or once we confirm it with you on WhatsApp. We may cancel an order if a product is out of stock, a PIN code is not serviceable or the price shown was wrong; in that case you get a full refund.</p>
+<h2>Payments</h2><p>Online payments are processed by our payment partner. We do not store card or bank details.</p>
+<h2>Returns</h2><p>See our <a href="refund.html">returns and refunds policy</a>.</p>
+<h2>Governing law</h2><p>These terms are governed by the laws of India. Courts at [CITY] have jurisdiction.</p>
+</main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("[data-cfg]").forEach(function (el) { el.textContent = FF_CONFIG[el.getAttribute("data-cfg")]; });
+  var wa = document.getElementById("wa-link"); if (wa) wa.href = FF.waLink("Hi FarmFLAX, I need help with my order.");
+});
+</script>
+</body>
+</html>

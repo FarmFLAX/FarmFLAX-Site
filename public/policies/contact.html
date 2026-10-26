@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact us · FarmFLAX</title>
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/app.js"></script>
+</head>
+<body>
+<div id="ff-header"></div>
+<main class="wrap prose">
+<h1>Contact us</h1>
+<p class="muted">Last updated: [DATE]</p>
+<p class="draft">Draft for review by your CA or lawyer before launch. Text in [square brackets] must be filled in.</p>
+<p>We are a small team and we read every message.</p>
+<h2>WhatsApp</h2><p><a id="wa-link" href="#" target="_blank" rel="noopener"><span data-cfg="phoneDisplay"></span></a> (fastest)</p>
+<h2>Email</h2><p><span data-cfg="email"></span></p>
+<h2>Registered office</h2><p><span data-cfg="legalName"></span><br><span data-cfg="address"></span></p>
+<h2>Business details</h2><p>GSTIN: <span data-cfg="gstin"></span><br>FSSAI: <span data-cfg="fssai"></span></p>
+</main>
+<div id="ff-footer"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("[data-cfg]").forEach(function (el) { el.textContent = FF_CONFIG[el.getAttribute("data-cfg")]; });
+  var wa = document.getElementById("wa-link"); if (wa) wa.href = FF.waLink("Hi FarmFLAX, I need help with my order.");
+});
+</script>
+</body>
+</html>

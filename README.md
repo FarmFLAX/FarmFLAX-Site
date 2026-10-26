@@ -1,2 +1,2 @@
-# farmflax-site
+# FarmFLAX-Site
 FarmFLAX Website
